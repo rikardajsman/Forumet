@@ -1,0 +1,12 @@
+{
+  "users": {
+    "alpha": "scrypt:32768:8:1$B7Rj73ljSZETepLQ$94095f782fb48923c26471a39a1c82a116d93d4bbac3e50067ae66202850bd7a35b46d0c5815d93a04f71fac57a6aa3bfe1bd41df4eff3b967cdb311f78eca76"
+  },
+  "posts": [
+    {
+      "author": "alpha",
+      "category": "Python",
+      "message": "Hello World!"
+    }
+  ]
+}

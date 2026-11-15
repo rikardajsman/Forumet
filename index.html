@@ -3,34 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <title>AlphaStack Forum</title>
 </head>
 <body>
-<nav>
+<header>
     <h1>AlphaStack</h1>
-    <h2>Here do we discuss things about programming.</h2>
-
-    <p>Login/Signup</p>
-
-
-    <button>Enter</button>
-</nav>
-
-<h1>Welcome to AlphaStack!</h1>
-
-<p>Welcome to the community for programmers!</p>
-
-<div>
-    </div>
-    <div>
-        <h2>What is AlphaStack?</h2>
-        <p>AlphaStack is a community for programmers to discuss and share knowledge about programming.</p>
-
-    </div>
-<h3>Latest Discussions</h3>
-
-<h4>Post something!</h4>
-<textarea placeholder="Discuss..."></textarea>
+    <p>Programming discussions, organized by topic.</p>
+    {% if session.get('username') %}
+    <p>Signed in as <strong>{{ session['username'] }}</strong></p>
+    <form method="post"><input type="hidden" name="csrf" value="{{ session['csrf'] }}">
+        <button name="action" value="logout">Sign out</button></form>
+    {% else %}
+    <h2>Sign in or create an account</h2>
+    {% for action, label in [('login', 'Sign in'), ('register', 'Create account')] %}
+    <form method="post">
+        <input type="hidden" name="csrf" value="{{ session['csrf'] }}">
+        <input type="hidden" name="action" value="{{ action }}">
+        <label>Username <input name="username" minlength="3" maxlength="24" required></label>
+        <label>Password <input type="password" name="password" minlength="12" required></label>
+        <button>{{ label }}</button>
+    </form>
+    {% endfor %}
+    {% endif %}
+</header>
+{% if error %}<p role="alert">{{ error }}</p>{% endif %}
+{% if session.get('username') %}
+<h2>Start a discussion</h2>
+<form method="post">
+    <input type="hidden" name="csrf" value="{{ session['csrf'] }}">
+    <input type="hidden" name="action" value="post">
+    <label>Topic <select name="category" required>
+        {% for category in categories %}<option>{{ category }}</option>{% endfor %}
+    </select></label>
+    <label>Post <textarea name="message" maxlength="500" required></textarea></label>
+    <button>Post</button>
+</form>
+{% endif %}
+<h2>Latest discussions</h2>
+{% for post in posts %}
+<article><h3>{{ post['category'] }}</h3><p>{{ post['message'] }}</p>
+    <small>Posted by {{ post['author'] }}</small></article>
+{% else %}<p>No discussions yet.</p>{% endfor %}
 </body>
 </html>
